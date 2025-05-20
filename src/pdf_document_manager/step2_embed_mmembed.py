@@ -1,0 +1,1 @@
+#  Redirect to `scripts/pdf_document__manager/step2_embed_mmembed.sh`

@@ -1,0 +1,59 @@
+
+
+
+root_path: /root/LILaC
+
+dataset_subpath: datasets
+
+
+
+
+directory_alias:
+  parsed_documents_dirname: parsed_documents
+  component_dirname: components
+  query_decomposition_dirname: query_decomposition
+  image_components_dirname: image_components/dev
+  subimage_components_dirname: image_components_sub/dev
+  image_summaries_dirname: image_summaries/dev
+  image_subsummaries_dirname:  image_summaries_sub/dev
+  edges_dirname: edges
+  embeddings_dirname: embeddings
+  embedding_serializations_dirname: embeddings/serializations
+  image_docs_dirname: resized_images
+  dla_results_dirname: dla_results
+  htmls_dirname: htmls
+  temp_dirname: temp
+
+metadata_files:
+  url_title_map: url_title_map_dev.json
+  thumturl_summary_map: thumburl_summary_map_dev.json
+  thumburl_filename_map: thumburl_procfilename_map_dev.json
+  thumburl_url_map: thumburl_url_map_dev.json
+
+
+dataset_metadata:
+  MMWebQA:
+    name: MMWebQA
+    type: multimodalqa
+  MMCoQA:
+    name: MMCoQA
+    type: multimodalqa
+  InfoVQA:
+    name: InfoVQA
+    type: vqa
+  MP-DocVQA:
+    name: MP-DocVQA
+    type: vqa
+  SlideVQA:
+    name: SlideVQA
+    type: vqa
+
+
+type_to_dataset:
+  multimodalqa:
+    - MMWebQA
+    - MMCoQA
+  vqa:
+    - InfoVQA
+    - MP-DocVQA
+    - SlideVQA

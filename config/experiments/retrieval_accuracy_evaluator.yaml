@@ -1,0 +1,67 @@
+Metadata:
+  ROOT_PATH: "/root/LILaC"
+  DIRECTORY_SUBPATH: "algorithm_results"
+
+Algorithms:
+
+  # VisRAG:
+  #   MMWebQA: 
+  #     retrieval_directory: "retrieval"
+  #     run_name: "retrieval_results.json"
+  #     label_type: "page"
+  #     k : 3
+    
+  #   MMCoQA:
+  #     retrieval_directory: "retrieval"
+  #     run_name: "retrieval_results.json"
+  #     label_type: "page"
+  #     k : 3
+
+  #   MP-DocVQA:
+  #     retrieval_directory: "retrieval"
+  #     run_name: "retrieval_results.json"
+  #     label_type: "page"
+  #     k : 10
+    
+  #   SlideVQA:
+  #     retrieval_directory: "retrieval"
+  #     run_name: "retrieval_results.json"
+  #     label_type: "page"
+  #     k : 10
+
+  #   InfoVQA:
+  #     retrieval_directory: "retrieval"
+  #     run_name: "retrieval_results.json"
+  #     label_type: "page"
+  #     k : 10
+  
+  LILaC:
+    MMWebQA: 
+      retrieval_directory: "retrieval"
+      run_name: "mmebed_defulat.jsonl"
+      label_type: "component"
+      k : 9
+
+    MMCoQA:
+      retrieval_directory: "retrieval"
+      run_name: "mmebed_defulat.jsonl"
+      label_type: "component"
+      k : 9
+
+    MP-DocVQA:
+      retrieval_directory: "retrieval"
+      run_name: "mmebed_defulat.jsonl"
+      label_type: "page"
+      k : 10
+    
+    SlideVQA:
+      retrieval_directory: "retrieval"
+      run_name: "mmebed_defulat.jsonl"
+      label_type: "page"
+      k : 10
+
+    InfoVQA:
+      retrieval_directory: "retrieval"
+      run_name: "mmebed_defulat.jsonl"
+      label_type: "page"
+      k : 10

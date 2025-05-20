@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=2 python3 src/multimodal_document_manager/image_parser/summarize_images.py
