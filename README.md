@@ -34,29 +34,51 @@ Together, these ideas enable efficient yet accurate multihop reasoning and deliv
 
 ## ⚡ Quick Start
 
-### 1. Install core dependencies
+### 1. Download Docker and Start Docker Container
+
+First, download the Docker image that contains all necessary resources:
 
 ```bash
-conda create -n lilac python=3.10 -y
-conda activate lilac
-pip install -r requirements.txt
+docker pull anonymoussubmitter/arr_2025_may_lilac
 ```
 
-> Tested with **Python 3.10**, **PyTorch 2.2**, and **CUDA 12.2**.
+Next, run the Docker container:
+```bash
+docker run -it --name lilac --gpus all anonymoussubmitter/arr_2025_may_lilac /bin/bash
+```
 
-### 2. Download pretrained models
+This Docker image includes:
+
+* The full LILaC implementation
+* Scripts for reproducing experiments
+* Preprocessed datasets for the 5 benchmarks used in LILaC
+* Precomputed MM-Embed embeddings for immediate reproduction on MultimodalQA
+
+| Note: For other embedders (UniME, mmE5), embeddings must be generated separately due to image size constraints. Instructions are provided below.
+
+
+### 2. Download Pretrained Model for Generation
 
 Includes **Qwen‑2.5‑VL‑7B** for multimodal embedding and multimodal generation.
 
 ```bash
-./Models/download_models.sh
+/root/LILaC/Models/download_generator.sh
 ```
 
 ### 3. Reproduce MM‑Embed baseline results (one‑liner each)
 
+Quickly reproduce the MM-Embed experimental results with these one-line scripts:
+
+Evaluate retriever accuracy:
 ```bash
 /root/LILaC/scripts/experiments/retriever_accuracy.sh
+```
+Evaluate end-to-end accuracy:
+```bash
 /root/LILaC/scripts/experiments/end_to_end_accuracy.sh
+```
+Perform parameter sensitivity analysis:
+```bash
 /root/LILaC/scripts/experiments/parameter_sensitivity.sh
 ```
 
@@ -69,7 +91,16 @@ Includes **Qwen‑2.5‑VL‑7B** for multimodal embedding and multimodal genera
 
 ### 5. (Optional) Evaluate **UniME** and **mmE5** embedders
 
-#### 5‑1. Create separate conda environments
+
+### 5-1. Download pretrained models
+
+Includes **Qwen‑2.5‑VL‑7B** for multimodal embedding and multimodal generation.
+
+```bash
+/root/LILaC/Models/download_embedder.sh
+```
+
+#### 5‑2. Create separate conda environments
 
 ```bash
 mkdir -p ~/miniconda3
@@ -92,7 +123,7 @@ conda create -n mme5    python=3.10 -y && pip install -r conda_environments/mme5
 
 Uncomment the **UniME** / **mmE5** lines in:
 
-```
+```bash
 /root/LILaC/scripts/experiments/retriever_accuracy.sh
 /root/LILaC/scripts/experiments/parameter_sensitivity.sh
 /root/LILaC/scripts/experiments/end_to_end_accuracy.sh
