@@ -1,6 +1,9 @@
 import json
 import os
 import shutil
+from pathlib import Path
+
+REPO_ROOT = str(Path(__file__).resolve().parents[2])
 
 def read_json_or_jsonl(file_path):
     """
@@ -64,6 +67,17 @@ def append_to_jsonl_file(data, file_path):
         raise
     
 
+def _substitute_repo_root(obj):
+    """Recursively replace the ``${REPO_ROOT}`` token in any string values."""
+    if isinstance(obj, str):
+        return obj.replace("${REPO_ROOT}", REPO_ROOT)
+    if isinstance(obj, list):
+        return [_substitute_repo_root(v) for v in obj]
+    if isinstance(obj, dict):
+        return {k: _substitute_repo_root(v) for k, v in obj.items()}
+    return obj
+
+
 def read_yaml(filepath):
     """
     Reads a YAML file and returns its content.
@@ -74,12 +88,12 @@ def read_yaml(filepath):
     Returns:
         dict: Content of the YAML file.
     """
-    
+
     import yaml
     try:
         with open(filepath, 'r') as file:
             data = yaml.safe_load(file)
-        return data
+        return _substitute_repo_root(data)
     except Exception as e:
         print(f"Error reading YAML file {filepath}: {e}")
         raise
@@ -208,6 +222,114 @@ def ensure_output_dir(path: str, force_overwrite: bool = False) -> None:
 def get_component_id(s: str) -> str:
     parts = s.split('_')
     return '_'.join(parts[:2])
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Path resolution helpers — datasets/<DS>/ vs artifacts/<DS>/
+# ──────────────────────────────────────────────────────────────────────────────
+def _datasets_subdir(config: dict) -> str:
+    """Return the configured top-level subpath for datasets (e.g. 'datasets')."""
+    if "dataset_subpath" in config:
+        return config["dataset_subpath"]
+    return config["subpath"]["datasets"]
+
+
+def _artifacts_subdir(config: dict) -> str:
+    """Return the configured top-level subpath for artifacts (e.g. 'artifacts')."""
+    if "artifact_subpath" in config:
+        return config["artifact_subpath"]
+    return config["subpath"]["artifacts"]
+
+
+def dataset_root(config: dict, dataset_name: str) -> str:
+    """Absolute path to ``<repo>/<dataset_subpath>/<DS>``."""
+    return os.path.join(config["root_path"], _datasets_subdir(config), dataset_name)
+
+
+def artifact_root(config: dict, dataset_name: str) -> str:
+    """Absolute path to ``<repo>/<artifact_subpath>/<DS>``."""
+    return os.path.join(config["root_path"], _artifacts_subdir(config), dataset_name)
+
+
+def input_subpath(config: dict, dataset_name: str, alias_key: str, *parts: str) -> str:
+    """Resolve ``config['input_alias'][alias_key]`` under ``datasets/<DS>/``.
+
+    Extra ``parts`` are joined after the alias (e.g. ``"dev"``).
+    """
+    base = os.path.join(dataset_root(config, dataset_name), config["input_alias"][alias_key])
+    return os.path.join(base, *parts) if parts else base
+
+
+def artifact_subpath(config: dict, dataset_name: str, alias_key: str, *parts: str) -> str:
+    """Resolve ``config['artifact_alias'][alias_key]`` under ``artifacts/<DS>/``.
+
+    Extra ``parts`` are joined after the alias (e.g. ``"dev"``).
+    """
+    base = os.path.join(artifact_root(config, dataset_name), config["artifact_alias"][alias_key])
+    return os.path.join(base, *parts) if parts else base
+
+
+def _is_populated_dir(path: str) -> bool:
+    if not os.path.isdir(path):
+        return False
+    for entry in os.listdir(path):
+        if not entry.startswith("."):
+            return True
+    return False
+
+
+def parsed_documents_path(config: dict, dataset_name: str, split: str = "dev") -> str:
+    """
+    Read-side accessor for parsed_documents.
+
+    Returns the artifact path (``artifacts/<DS>/parsed_documents/<split>/``) if
+    the pipeline has populated it; otherwise falls back to the immutable seed
+    in ``datasets/<DS>/parsed_documents/<split>/``. Callers that *write* to
+    parsed_documents should use ``ensure_artifact_parsed_documents`` instead.
+    """
+    artifact_p = artifact_subpath(config, dataset_name, "parsed_documents_dirname", split)
+    if _is_populated_dir(artifact_p):
+        return artifact_p
+    return input_subpath(config, dataset_name, "parsed_documents_dirname", split)
+
+
+def ensure_artifact_parsed_documents(config: dict, dataset_name: str, split: str = "dev") -> str:
+    """
+    Ensure ``artifacts/<DS>/parsed_documents/<split>/`` is initialized.
+
+    On first run, copies the seed from ``datasets/<DS>/parsed_documents/<split>/``.
+    On subsequent runs, returns the existing artifact path unchanged so the
+    pipeline can keep mutating it in place.
+
+    Returns the artifact path.
+    """
+    src = input_subpath(config, dataset_name, "parsed_documents_dirname", split)
+    dst = artifact_subpath(config, dataset_name, "parsed_documents_dirname", split)
+
+    if _is_populated_dir(dst):
+        return dst
+
+    if not _is_populated_dir(src):
+        raise FileNotFoundError(
+            f"Cannot seed parsed_documents: input directory is missing or empty: {src}\n"
+            f"For MultimodalQA / MMCoQA, download parsed_documents from Hugging Face "
+            f"first (see README)."
+        )
+
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    if os.path.isdir(dst):
+        # exists but empty — copy contents in
+        for entry in os.listdir(src):
+            s = os.path.join(src, entry)
+            d = os.path.join(dst, entry)
+            if os.path.isdir(s):
+                shutil.copytree(s, d, dirs_exist_ok=True)
+            else:
+                shutil.copy2(s, d)
+    else:
+        shutil.copytree(src, dst)
+    print(f"📥  Seeded {dst} ← {src}")
+    return dst
 
 
 

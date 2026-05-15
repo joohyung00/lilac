@@ -1,0 +1,131 @@
+root_path: ${REPO_ROOT}
+
+# Top-level subdirectories under root_path.
+subpath:
+  datasets:           datasets
+  artifacts:          artifacts
+  models:             models
+  algorithm_results:  algorithm_results
+
+algorithm_name: LILaC
+
+# Models used in embedding
+models:
+  MM-Embed:
+    name: MM-Embed
+    type: multimodal
+    vector_dim: 4096
+  LLaVE-7B:
+    name: LLaVE-7B
+    type: multimodal
+    vector_dim: 3584
+  NV-Embed-v2:
+    name: NV-Embed-v2
+    type: text
+    vector_dim: 4096
+
+
+# Benchmark-related metadata.
+#
+# Capability flags (the lines below `filename`) let new datasets opt into /
+# out of pipeline stages without touching code:
+#
+#   qa_schema             which parser to dispatch in src/experiment/parser/
+#                         (registered names: vqa_evidence, mmqa_component,
+#                         mmqa_page; see register_qa_parser())
+#   document_granularity  "page" (one image per document; VQA-style) or
+#                         "webpage" (multi-component document; MultimodalQA-style)
+#   needs_dereference     run step1_dereference?
+#   has_page_summaries    does the generator read image_summaries text files?
+dataset_metadata:
+  MultimodalQA:
+    name: MultimodalQA
+    type: multimodalqa
+    filename: QAs_dev_labeled.json
+    qa_schema: mmqa_component
+    document_granularity: webpage
+    needs_dereference: true
+    has_page_summaries: false
+  MMCoQA:
+    name: MMCoQA
+    type: multimodalqa
+    filename: QAs_dev_labeled.json
+    qa_schema: mmqa_component
+    document_granularity: webpage
+    needs_dereference: true
+    has_page_summaries: false
+  InfoVQA:
+    name: InfoVQA
+    type: vqa
+    filename: QAs_dev.json
+    qa_schema: vqa_evidence
+    document_granularity: page
+    needs_dereference: false
+    has_page_summaries: true
+  MP-DocVQA:
+    name: MP-DocVQA
+    type: vqa
+    filename: QAs_dev.json
+    qa_schema: vqa_evidence
+    document_granularity: page
+    needs_dereference: false
+    has_page_summaries: true
+  SlideVQA:
+    name: SlideVQA
+    type: vqa
+    filename: QAs_dev.json
+    qa_schema: vqa_evidence
+    document_granularity: page
+    needs_dereference: false
+    has_page_summaries: true
+
+
+type_to_dataset:
+  multimodalqa:
+    - MultimodalQA
+    - MMCoQA
+  vqa:
+    - InfoVQA
+    - MP-DocVQA
+    - SlideVQA
+
+
+# Directories that live under datasets/<DS>/ (read-only inputs).
+# These are parent directories — callers append "/dev" when accessing the
+# split-specific contents.
+input_alias:
+  parsed_documents_dirname: parsed_documents
+  image_components_dirname: image_components
+  pdf_pages_dirname:        pdf_pages
+
+
+# Directories that live under artifacts/<DS>/ (pipeline outputs).
+artifact_alias:
+  parsed_documents_dirname:         parsed_documents
+  component_dirname:                components
+  query_decomposition_dirname:      query_decomposition
+  subimage_components_dirname:      image_components_sub
+  image_summaries_dirname:          image_summaries
+  image_subsummaries_dirname:       image_summaries_sub
+  edges_dirname:                    edges
+  embeddings_dirname:               embeddings
+  embedding_serializations_dirname: embeddings/serializations
+  image_docs_dirname:               resized_images
+  dla_results_dirname:              dla_results
+  htmls_dirname:                    htmls
+  temp_dirname:                     temp
+
+
+metadata_files:
+  url_title_map:    url_title_map_dev.json
+  thumburl_url_map: thumburl_url_map_dev.json
+
+  qa_pairs:    QAs_dev.jsonl
+  subqueries:  subqueries_with_modality.json
+
+  subqueries_modality_agnostic:       subqueries_modality_agnostic.pt
+  subqueries_modality_agnostic_index: subqueries_modality_agnostic.json
+  subqueries_modality_aware:          subqueries_modality_aware.pt
+  subqueries_modality_aware_index:    subqueries_modality_aware.json
+  query_embeddings:                   query.pt
+  query_embeddings_index:             query.json

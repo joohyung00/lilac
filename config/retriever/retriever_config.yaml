@@ -1,0 +1,44 @@
+
+
+
+run_name: default
+
+run_mode: iterative_late_interaction
+# run_mode: late_interaction
+# run_mode: single_knn
+# run_mode: single_topdown
+
+# target_dataset: InfoVQA
+# target_dataset: SlideVQA
+# target_dataset: MP-DocVQA
+# target_dataset: MMCoQA
+target_dataset: MultimodalQA
+
+embedding_model: MM-Embed
+# embedding_model: UniME
+# embedding_model: MMe5
+
+parameters:
+  modality_mode: aware
+  num_iterations: 1
+  beam_width: 30
+  hop_mode: 1_hop
+  
+  target_level: top
+
+  top_k: 100
+
+force_overwrite: false
+
+
+top_level_embeddings:
+  text: text
+  table: table
+  image: image
+  gpu_num: 0
+
+low_level_embeddings:
+  text: sentence
+  table: table_segment
+  image: subimage
+  gpu_num: 0

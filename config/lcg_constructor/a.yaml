@@ -1,0 +1,77 @@
+root_path: ${REPO_ROOT}
+
+# Top-level subdirectories under root_path.
+# - dataset_subpath holds *immutable* user-provided inputs (QAs, raw parsed
+#   documents, raw image components, etc.).
+# - artifact_subpath holds everything the pipeline produces or mutates
+#   (working copy of parsed_documents, summaries, sub-images, embeddings,
+#   query decompositions, intermediate caches, …).
+dataset_subpath: datasets
+artifact_subpath: artifacts
+
+
+# Directories that live under datasets/<DS>/ (read-only inputs).
+# Parent directories — callers append "/dev" for the split-specific contents.
+input_alias:
+  parsed_documents_dirname: parsed_documents
+  image_components_dirname: image_components
+  pdf_pages_dirname:        pdf_pages
+
+
+# Directories that live under artifacts/<DS>/ (pipeline outputs).
+artifact_alias:
+  parsed_documents_dirname:         parsed_documents
+  component_dirname:                components
+  query_decomposition_dirname:      query_decomposition
+  subimage_components_dirname:      image_components_sub
+  image_summaries_dirname:          image_summaries
+  image_subsummaries_dirname:       image_summaries_sub
+  edges_dirname:                    edges
+  embeddings_dirname:               embeddings
+  embedding_serializations_dirname: embeddings/serializations
+  image_docs_dirname:               resized_images
+  dla_results_dirname:              dla_results
+  htmls_dirname:                    htmls
+  temp_dirname:                     temp
+
+
+metadata_files:
+  url_title_map:        url_title_map_dev.json
+  thumturl_summary_map: thumburl_summary_map_dev.json
+  thumburl_filename_map: thumburl_procfilename_map_dev.json
+  thumburl_url_map:     thumburl_url_map_dev.json
+
+
+# Capability flags — see config/retriever/retriever_metadata.yaml for full docs.
+# Only the flags used by lcg_constructor steps live here.
+dataset_metadata:
+  MultimodalQA:
+    name: MultimodalQA
+    type: multimodalqa
+    needs_dereference: true
+  MMCoQA:
+    name: MMCoQA
+    type: multimodalqa
+    needs_dereference: true
+  InfoVQA:
+    name: InfoVQA
+    type: vqa
+    needs_dereference: false
+  MP-DocVQA:
+    name: MP-DocVQA
+    type: vqa
+    needs_dereference: false
+  SlideVQA:
+    name: SlideVQA
+    type: vqa
+    needs_dereference: false
+
+
+type_to_dataset:
+  multimodalqa:
+    - MultimodalQA
+    - MMCoQA
+  vqa:
+    - InfoVQA
+    - MP-DocVQA
+    - SlideVQA

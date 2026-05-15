@@ -2,7 +2,7 @@
 DEVICENUM=0
 
 # List of datasets you want to run on
-DATASETS=("MMWebQA" "MMCoQA" "MP-DocVQA" "SlideVQA" "InfoVQA")
+DATASETS=("MultimodalQA" "MMCoQA" "MP-DocVQA" "SlideVQA" "InfoVQA")
 
 ########################################
 # 1) Parameter sensitivity for beam_width
@@ -18,7 +18,7 @@ for DS in "${DATASETS[@]}"; do
     echo "==== Running parameter sensitivity for beam_width=$BW on dataset=$DS ===="
 
     # Run the retriever
-    CUDA_VISIBLE_DEVICES=$DEVICENUM python3 src/top_modules/retriever.py \
+    CUDA_VISIBLE_DEVICES=$DEVICENUM python3 src/lilac/retriever/retriever.py \
       --target_dataset "$DS" \
       --run_mode late_interaction \
       --parameter_numiterations 1 \
@@ -43,7 +43,7 @@ for DS in "${DATASETS[@]}"; do
   echo "==== Running parameter sensitivity for num_iterations=0 on dataset=$DS ===="
   
   RUN_NAME="parametersensitivity_ni0_bw5"
-  CUDA_VISIBLE_DEVICES=$DEVICENUM python3 src/top_modules/retriever.py \
+  CUDA_VISIBLE_DEVICES=$DEVICENUM python3 src/lilac/retriever/retriever.py \
   --target_dataset "$DS" \
   --run_mode single_knn \
   --parameter_beamwidth 5 \
@@ -56,7 +56,7 @@ for DS in "${DATASETS[@]}"; do
     RUN_NAME="parametersensitivity_ni${NI}_bw5"
     echo "==== Running parameter sensitivity for num_iterations=$NI on dataset=$DS ===="
 
-    CUDA_VISIBLE_DEVICES=$DEVICENUM python3 src/top_modules/retriever.py \
+    CUDA_VISIBLE_DEVICES=$DEVICENUM python3 src/lilac/retriever/retriever.py \
       --target_dataset "$DS" \
       --run_mode late_interaction \
       --parameter_beamwidth 5 \

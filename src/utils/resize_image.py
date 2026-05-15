@@ -2,6 +2,8 @@ import os
 from PIL import Image
 from tqdm import tqdm
 
+from src.utils.utils import REPO_ROOT
+
 def resize_image_to_box(img: Image.Image, max_size: int = 640) -> Image.Image:
     """
     Resize the image to fit within a (max_size x max_size) box, keeping aspect ratio.
@@ -47,7 +49,7 @@ def batch_resize_images(input_dir: str, output_dir: str, max_size: int = 640):
             print(f"Error processing {filename}: {e}")
 
 if __name__ == "__main__":
-    input_folder  = "/root/LILaC/datasets/MMCoQA/imagesProcessed_/dev"
-    output_folder = "/root/LILaC/datasets/MMCoQA/imagesProcessed/dev"
+    input_folder  = f"{REPO_ROOT}/datasets/MMCoQA/imagesProcessed_/dev"
+    output_folder = f"{REPO_ROOT}/datasets/MMCoQA/imagesProcessed/dev"
 
     batch_resize_images(input_folder, output_folder, max_size=640)

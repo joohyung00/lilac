@@ -1,11 +1,11 @@
 Metadata:
-  ROOT_PATH: "/root/LILaC"
+  ROOT_PATH: "${REPO_ROOT}"
   DIRECTORY_SUBPATH: "algorithm_results"
 
 Algorithms:
 
   # VisRAG:
-  #   MMWebQA: 
+  #   MultimodalQA: 
   #     retrieval_directory: "retrieval"
   #     run_name: "retrieval_results.json"
   #     label_type: "page"
@@ -36,7 +36,7 @@ Algorithms:
   #     k : 10
   
   LILaC:
-    MMWebQA: 
+    MultimodalQA: 
       retrieval_directory: "retrieval"
       run_name: "mmebed_defulat.jsonl"
       label_type: "component"

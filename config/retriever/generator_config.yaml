@@ -1,0 +1,21 @@
+
+
+run_name: test
+
+target_dataset: MultimodalQA
+
+generation_model: Qwen2.5_VL_7B
+
+retrieval_results_path: ${REPO_ROOT}/algorithm_results/LILaC/MultimodalQA/retrieval/mmembed_default.jsonl
+
+num_components: 9
+
+force_overwrite: true
+
+num_gpus : 4
+
+images_subpath: image_components
+
+path_to_model: ${REPO_ROOT}/models/Qwen2.5-VL-7B-Instruct
+
+text_only: false

@@ -1,19 +1,19 @@
 
-MMWebQA: 
-  component:  "/root/LILaC/datasets/MMWebQA/QAs_dev_labeled.json"
-  page:       "/root/LILaC/datasets/M3DocVQA/M3DocVQA_dev_labeled.json"
+MultimodalQA: 
+  component:  "${REPO_ROOT}/datasets/MultimodalQA/QAs_dev_labeled.json"
+  page:       "${REPO_ROOT}/datasets/M3DocVQA/M3DocVQA_dev_labeled.json"
 WebQA: 
   component:  null
   page:       null
 MMCoQA:
-  component:  "/root/LILaC/datasets/MMCoQA/QAs_dev_labeled.json"
-  page:       "/root/LILaC/datasets/MMCoQA/QAs_dev_page_labeled.json"
+  component:  "${REPO_ROOT}/datasets/MMCoQA/QAs_dev_labeled.json"
+  page:       "${REPO_ROOT}/datasets/MMCoQA/QAs_dev_page_labeled.json"
 MP-DocVQA:
   component:  null
-  page:       "/root/LILaC/datasets/MP-DocVQA/QAs_dev.json"
+  page:       "${REPO_ROOT}/datasets/MP-DocVQA/QAs_dev.json"
 SlideVQA:
   component:  null
-  page:       "/root/LILaC/datasets/SlideVQA/QAs_dev.json"
+  page:       "${REPO_ROOT}/datasets/SlideVQA/QAs_dev.json"
 InfoVQA:
   component:  null
-  page:       "/root/LILaC/datasets/InfoVQA/QAs_dev.json"
+  page:       "${REPO_ROOT}/datasets/InfoVQA/QAs_dev.json"

@@ -1,5 +1,5 @@
 
 
-qwen2_5_72b:    "/root/LILaC/Models/Qwen2.5-72B-Instruct"
+qwen2_5_72b:    "${REPO_ROOT}/models/Qwen2.5-72B-Instruct"
 
-qwen2_5_vl_7b:  "/root/LILaC/Models/Qwen2.5-7B-Instruct"
+qwen2_5_vl_7b:  "${REPO_ROOT}/models/Qwen2.5-7B-Instruct"
