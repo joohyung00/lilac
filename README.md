@@ -15,7 +15,7 @@ LILaC is a **retrieval‑first framework** for open‑domain question answering 
 1. **Layered Component Graph (LCG)** – documents are represented at *two granularities* (paragraph / table / image ↔ sentence / row / object) and are connected by explicit intra‑ & inter‑document edges.
 2. **Late‑Interaction Subgraph Retrieval** – a beam‑search traversal that scores candidate edges on‑the‑fly via *subcomponent‑level late interaction*, guided by LLM‑driven query decomposition.
 
-Together, these ideas deliver **state‑of‑the‑art retrieval on 4 / 5 public benchmarks without any task‑specific fine‑tuning**.
+Together, these ideas deliver **state‑of‑the‑art retrieval on 4 of 5 public benchmarks without any task‑specific fine‑tuning**.
 
 ---
 
